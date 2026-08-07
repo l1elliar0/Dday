@@ -1,87 +1,26 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Couple D-Day</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Aero Pair Boarding Pass</title>
+
 <style>
 *{box-sizing:border-box}
 
 :root{
-  --bg:#ffffff;
-  --text:#232323;
-  --muted:#969696;
-  --line:#dedede;
-  --accent:#f1c8d5; /* 캐릭터마다 이 색만 바꿔도 됨 */
+  --paper:#ffffff;
+  --ink:#242424;
+  --muted:#8f979d;
+  --line:#d9e2e8;
+  --accent:#dcecf7;
+  --accent-strong:#9fc5df;
+  --accent-deep:#6f9fbe;
 }
 
 html,body{
   margin:0;
   background:transparent;
-  font-family:"Pretendard","Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-}
-
-body{
-  display:flex;
-  justify-content:center;
-  align-items:flex-start;
-  padding:2px;
-}
-
-.widget{
-  position:relative;
-  width:300px;
-  height:96px;
-  padding:13px 15px 12px 17px;
-  background:var(--bg);
-  border:1px solid #e8e8e8;
-  border-radius:10px;
-  overflow:hidden;
-}
-
-/* 작은 색 포인트 — 장식은 이것만 */
-.widget::before{
-  content:"";
-  position:absolute;
-  left:0;
-  top:0;
-  width:4px;
-  height:100%;
-  background:var(--accent);
-}
-
-.head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-
-.kicker{
-  font-size:7px;
-  font-weight:700;
-  letter-spacing:1.35px;
-  color:#7e7e7e;
-}
-
-
-.main{
-  margin-top:9px;
-  padding-right:96px;
-}
-
-.names{
-  min-width:0;
-}
-
-/* D-Day는 왼쪽 글자 높이에 영향을 주지 않고 카드의 위·아래 여백 기준 중앙 */
-.count{
-  position:absolute;
-  right:17px;
-  /* 카드 상단(0px) ~ 하단 라인 시작점(약 84px)의 정중앙 */
-  top:42px;
-  transform:translateY(-50%);
-  min-width:82px;
-  text-align:right;
   font-family:
     "Pretendard",
     "Noto Sans KR",
@@ -90,82 +29,423 @@ body{
     "Segoe UI",
     Arial,
     sans-serif;
-  font-size:30px;
-  font-weight:800;
-  line-height:1;
-  letter-spacing:-1px;
-  color:var(--text);
-  font-variant-numeric:tabular-nums;
-  white-space:nowrap;
 }
 
-.count.medium{ font-size:28px; }
-.count.long{ font-size:24px; }
+body{
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding:3px;
+}
 
-.pair{
+.ticket{
+  position:relative;
+  width:390px;
+  height:138px;
+  display:grid;
+  grid-template-columns:1fr 118px;
+  overflow:hidden;
+
+  background:var(--paper);
+  border:1px solid #dfe5e9;
+  border-radius:12px;
+  color:var(--ink);
+
+  box-shadow:0 4px 16px rgba(42,55,64,.06);
+}
+
+/* 비행기 티켓의 뜯는 부분 */
+.ticket::before,
+.ticket::after{
+  content:"";
+  position:absolute;
+  z-index:4;
+  left:calc(100% - 124px);
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  background:#fff;
+  border:1px solid #dfe5e9;
+}
+.ticket::before{ top:-7px; }
+.ticket::after{ bottom:-7px; }
+
+.main{
+  position:relative;
+  padding:14px 17px 12px 18px;
   min-width:0;
-  font-size:11px;
-  font-weight:700;
-  color:var(--text);
+}
+
+.mid-block{
+  position:absolute;
+  left:18px;
+  right:24px;
+  top:58px;
+  transform:translateY(-50%);
+}
+
+
+
+/* 왼쪽 파란 boarding stripe */
+.main::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:5px;
+  background:var(--accent);
+}
+.topline{
+  display:flex;
+  justify-content:flex-start;
+  align-items:center;
+}
+
+.flight-code{
+  font-size:7px;
+  font-weight:800;
+  letter-spacing:1.4px;
+  color:#6f7c84;
+}
+.pair{
+  margin-top:0;
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:.15px;
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
 }
 
-.since{
-  margin-top:4px;
-  font-size:7.5px;
-  color:#8b8b8b;
-  letter-spacing:.25px;
+
+/* 좌측 조준점 / 가운데 비행기 / 우측 천칭 */
+.flight-path{
+  position:relative;
+  width:122px;
+  height:14px;
+  margin-top:9px;
 }
 
-
-.rule{
+.path-line{
   position:absolute;
-  left:17px;
-  right:15px;
-  bottom:11px;
+  left:12px;
+  right:12px;
+  top:7px;
   height:1px;
-  background:var(--line);
+  background:linear-gradient(
+    90deg,
+    #d7e3ea 0%,
+    var(--accent-strong) 50%,
+    #d7e3ea 100%
+  );
 }
 
-.rule::after{
+.path-plane{
+  position:absolute;
+  left:50%;
+  top:-1px;
+  transform:translateX(-50%) rotate(8deg);
+  font-size:9px;
+  line-height:1;
+  color:var(--accent-deep);
+  background:#fff;
+  padding:0 4px;
+}
+
+.path-target{
+  position:absolute;
+  width:10px;
+  height:10px;
+  border:1px solid #9eb5c3;
+  border-radius:50%;
+  top:1px;
+  background:#fff;
+}
+
+.path-target.left{
+  left:0;
+}
+
+.path-target::before,
+.path-target::after{
   content:"";
   position:absolute;
-  left:0;
-  top:-1px;
-  width:34px;
-  height:3px;
-  border-radius:10px;
-  background:var(--accent);
+  background:#9eb5c3;
 }
 
+.path-target::before{
+  left:50%;
+  top:-3px;
+  width:1px;
+  height:14px;
+  transform:translateX(-50%);
+}
+
+.path-target::after{
+  top:50%;
+  left:-3px;
+  width:14px;
+  height:1px;
+  transform:translateY(-50%);
+}
+
+.path-scale{
+  position:absolute;
+  right:0;
+  top:-1px;
+  width:12px;
+  text-align:center;
+  font-size:10px;
+  line-height:1;
+  color:#9eb5c3;
+  background:#fff;
+  padding:0 1px;
+}
+/* 하단 정보 */
+.meta{
+  position:absolute;
+  left:18px;
+  right:14px;
+  bottom:12px;
+  display:grid;
+  grid-template-columns:1.15fr .85fr .75fr;
+  gap:12px;
+}
+
+.item .label{
+  font-size:5.8px;
+  font-weight:800;
+  letter-spacing:.85px;
+  color:#a1a9ae;
+}
+
+.item .value{
+  margin-top:3px;
+  font-size:7.5px;
+  font-weight:700;
+  color:#50585d;
+  white-space:nowrap;
+  min-height:12px;
+  display:flex;
+  align-items:center;
+}
+
+.sight-item .value{
+  justify-content:flex-start;
+  padding-left:5px;
+}
+
+/* 사격 선수 모티프: 아주 작은 조준선 */
+.crosshair{
+  display:inline-block;
+  width:12px;
+  height:12px;
+  margin-right:5px;
+  vertical-align:-2px;
+  border:1px solid #8fa7b6;
+  border-radius:50%;
+  position:relative;
+}
+.crosshair::before,
+.crosshair::after{
+  content:"";
+  position:absolute;
+  background:#8fa7b6;
+}
+.crosshair::before{
+  left:50%;
+  top:-4px;
+  width:1px;
+  height:18px;
+  transform:translateX(-50%);
+}
+.crosshair::after{
+  top:50%;
+  left:-4px;
+  height:1px;
+  width:18px;
+  transform:translateY(-50%);
+}
+
+/* 오른쪽 스텁 */
+.stub{
+  position:relative;
+  padding:14px 13px 12px 15px;
+  border-left:1px dashed #cfd9df;
+  background:
+    linear-gradient(180deg, rgba(220,236,247,.46), rgba(255,255,255,.72));
+}
+
+.stub-head{
+  font-size:6.2px;
+  font-weight:800;
+  letter-spacing:1.15px;
+  color:#7c8991;
+  text-align:left;
+}
+
+.dday{
+  position:absolute;
+  top:58px;
+  left:17px;
+  transform:translateY(-50%);
+  min-height:30px;
+  text-align:left;
+  white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+  color:#30383d;
+}
+
+.dday-seat{
+  display:inline-block;
+  font-size:28px;
+  line-height:1;
+  font-weight:660;
+  letter-spacing:0;
+  color:#30383d;
+}
+
+.dday.medium .dday-seat{
+  font-size:25px;
+}
+
+.dday.long .dday-seat{
+  font-size:21px;
+}
+
+.dday.today .dday-seat{
+  font-size:22px;
+}
+
+.dday.negative .dday-seat{
+  font-size:22px;
+  letter-spacing:.2px;
+}
+
+.wind{
+  position:absolute;
+  left:15px;
+  right:13px;
+  bottom:13px;
+}
+
+.wind-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:5px;
+}
+
+.wind-label{
+  font-size:5.7px;
+  font-weight:800;
+  letter-spacing:.75px;
+  color:#9aa5aa;
+}
+
+.wind-value{
+  font-size:6.5px;
+  font-weight:700;
+  color:#688ba1;
+}
+
+.wind-track{
+  position:relative;
+  height:4px;
+  border-radius:99px;
+  background:#e9eef1;
+  overflow:hidden;
+}
+
+.wind-fill{
+  height:100%;
+  width:27%;
+  border-radius:inherit;
+  background:var(--accent-strong);
+}
+
+/* 미세한 거리/조준 눈금 */
+.sight-ticks{
+  position:absolute;
+  right:11px;
+  top:39px;
+  width:36px;
+  height:1px;
+  opacity:.22;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #667985 0 1px,
+      transparent 1px 5px
+    );
+}
 </style>
 </head>
 
 <body>
-<section class="widget">
-  <div class="head">
-    <div class="kicker">PAIR ARCHIVE</div>
-  </div>
+<section class="ticket">
 
   <div class="main">
-    <div class="names">
-      <div class="pair" id="pairName">EDEN × ANEMONE</div>
-      <div class="since">since <span id="startDate">2026.07.13</span></div>
+    <div class="topline">
+      <span class="flight-code" id="serial">FLIGHT 0713</span>
     </div>
 
-    <div class="count" id="dday">D+1</div>
+    <div class="mid-block">
+      <div class="pair" id="pairName">EDEN × ANEMONE</div>
+
+      <div class="flight-path" aria-hidden="true">
+        <span class="path-line"></span>
+        <span class="path-target left"></span>
+        <span class="path-plane">✈</span>
+        <span class="path-scale">⚖</span>
+      </div>
+    </div>
+
+    <div class="meta">
+      <div class="item">
+        <div class="label">DEPARTURE</div>
+        <div class="value" id="startDate">2026.07.13</div>
+      </div>
+
+      <div class="item">
+        <div class="label">ATTRIBUTE</div>
+        <div class="value">AERO / AERO</div>
+      </div>
+
+      <div class="item sight-item">
+        <div class="label">SIGHT</div>
+        <div class="value"><span class="crosshair"></span></div>
+      </div>
+    </div>
   </div>
 
-  <div class="rule"></div>
+  <aside class="stub">
+    <div class="stub-head">BOARDING DAY</div>
+
+    <div class="dday" id="dday">D+27</div>
+
+    <div class="sight-ticks"></div>
+
+    <div class="wind">
+      <div class="wind-row">
+        <span class="wind-label">NEXT 100</span>
+        <span class="wind-value" id="progressText">27%</span>
+      </div>
+
+      <div class="wind-track">
+        <div class="wind-fill" id="windFill"></div>
+      </div>
+    </div>
+  </aside>
+
 </section>
 
 <script>
-/* 수정할 부분 */
+/* ===== 이 부분만 바꾸면 다른 페어에 재사용 가능 ===== */
 const PAIR_NAME  = "EDEN × ANEMONE";
-const START_DATE = "2026-07-13";
-/* ------------ */
+const START_DATE = "2026-07-13";  // YYYY-MM-DD
+/* ================================================= */
 
 const TZ = "Asia/Seoul";
 
@@ -177,11 +457,11 @@ function getKstDate(){
     day:"2-digit"
   }).formatToParts(new Date());
 
-  const obj={};
+  const o={};
   for(const p of parts){
-    if(p.type!=="literal") obj[p.type]=Number(p.value);
+    if(p.type!=="literal") o[p.type]=Number(p.value);
   }
-  return obj;
+  return o;
 }
 
 function utc(y,m,d){
@@ -196,24 +476,44 @@ function update(){
   const now=getKstDate();
   const [sy,sm,sd]=START_DATE.split("-").map(Number);
 
-  const diff=Math.floor(
-    (utc(now.year,now.month,now.day)-utc(sy,sm,sd))/86400000
-  )+1;
+  const todayUTC=utc(now.year,now.month,now.day);
+  const startUTC=utc(sy,sm,sd);
+
+  /* 시작일 = 1일째 */
+  const days=Math.floor((todayUTC-startUTC)/86400000)+1;
 
   document.getElementById("pairName").textContent=PAIR_NAME;
-  document.getElementById("startDate").textContent=`${sy}.${pad(sm)}.${pad(sd)}`;
+  document.getElementById("startDate").textContent=
+    `${sy}.${pad(sm)}.${pad(sd)}`;
 
-  const el=document.getElementById("dday");
+  document.getElementById("serial").textContent=
+    `FLIGHT ${pad(sm)}${pad(sd)}`;
 
-  if(diff>0) el.textContent=`D+${diff}`;
-  else if(diff===0) el.textContent="D-DAY";
-  else el.textContent=`D${diff}`;
+  const dday=document.getElementById("dday");
+  dday.className = "dday";
 
-  /* D+100 / D+1000처럼 길어져도 레이아웃이 깨지지 않게 자동 축소 */
-  el.classList.remove("medium","long");
-  const absDays = Math.abs(diff);
-  if(absDays >= 1000) el.classList.add("long");
-  else if(absDays >= 100) el.classList.add("medium");
+  if(days > 0){
+    dday.innerHTML = `<span class="dday-seat">${days}D</span>`;
+  }else if(days === 0){
+    dday.classList.add("today");
+    dday.innerHTML = `<span class="dday-seat">0D</span>`;
+  }else{
+    dday.classList.add("negative");
+    dday.innerHTML = `<span class="dday-seat">-${Math.abs(days)}D</span>`;
+  }
+
+  const abs=Math.abs(days);
+  if(abs>=1000) dday.classList.add("long");
+  else if(abs>=100) dday.classList.add("medium");
+
+  /* 100일 단위로 다시 차는 게이지 */
+  const safe=Math.max(days,1);
+  const next=Math.ceil(safe/100)*100;
+  const prev=Math.max(0,next-100);
+  const pct=Math.max(0,Math.min(100,safe-prev));
+
+  document.getElementById("progressText").textContent=`${pct}%`;
+  document.getElementById("windFill").style.width=`${pct}%`;
 }
 
 update();
