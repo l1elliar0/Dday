@@ -3,521 +3,300 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Aero Pair Boarding Pass</title>
+<title>Pair D-Day Widget</title>
 
 <style>
-*{box-sizing:border-box}
-
 :root{
-  --paper:#ffffff;
-  --ink:#242424;
-  --muted:#8f979d;
-  --line:#d9e2e8;
-  --accent:#dcecf7;
-  --accent-strong:#9fc5df;
-  --accent-deep:#6f9fbe;
+  --page:#ffffff;
+  --card:#ffffff;
+  --text:#252525;
+  --sub:#858d96;
+  --line:#dde3e8;
+  --line-soft:#e8edf1;
+  --accent:#c9dbea;
+  --accent-text:#617b92;
+  --dot:#ddd8ef;
 }
+
+*{box-sizing:border-box}
 
 html,body{
   margin:0;
+  padding:0;
   background:transparent;
-  font-family:
-    "Pretendard",
-    "Noto Sans KR",
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Arial,
-    sans-serif;
+  font-family:Pretendard,"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--text);
 }
 
 body{
+  min-height:100vh;
   display:flex;
-  justify-content:center;
   align-items:flex-start;
-  padding:3px;
+  justify-content:center;
+  padding:4px;
 }
 
-.ticket{
-  position:relative;
-  width:410px;
-  height:148px;
-  display:grid;
-  grid-template-columns:1fr 124px;
-  overflow:hidden;
+.widget{
+  width:min(100%,324px);
+}
 
-  background:var(--paper);
-  border:1px solid #dfe5e9;
+/* 일반 라운드 카드 */
+.card-frame{
+  width:100%;
+  border:1px solid var(--line);
   border-radius:12px;
-  color:var(--ink);
-
-  box-shadow:0 4px 16px rgba(42,55,64,.06);
-}
-
-/* 비행기 티켓의 뜯는 부분 */
-.ticket::before,
-.ticket::after{
-  content:"";
-  position:absolute;
-  z-index:4;
-  left:calc(100% - 130px);
-  width:13px;
-  height:13px;
-  border-radius:50%;
-  background:#fff;
-  border:1px solid #dfe5e9;
-}
-.ticket::before{ top:-7px; }
-.ticket::after{ bottom:-7px; }
-
-.main{
-  position:relative;
-  padding:15px 18px 13px 19px;
-  min-width:0;
-}
-
-.mid-block{
-  position:absolute;
-  left:19px;
-  right:15px;
-  top:62px;
-  transform:translateY(-50%);
-}
-
-
-
-/* 왼쪽 파란 boarding stripe */
-.main::before{
-  content:"";
-  position:absolute;
-  left:0;
-  top:0;
-  bottom:0;
-  width:5px;
-  background:var(--accent);
-}
-.topline{
-  display:flex;
-  justify-content:flex-start;
-  align-items:center;
-}
-
-.flight-code{
-  font-size:7.7px;
-  font-weight:800;
-  letter-spacing:1.4px;
-  color:#6f7c84;
-}
-.pair{
-  margin-top:0;
-  font-size:14px;
-  font-weight:800;
-  letter-spacing:.15px;
-  white-space:nowrap;
+  background:var(--card);
   overflow:hidden;
-  text-overflow:ellipsis;
 }
 
+.card{
+  width:100%;
+  padding:14px 18px 14px;
+  background:var(--card);
+}
 
-/* 좌측 조준점 / 가운데 비행기 / 우측 천칭 */
-.flight-path{
+/* PAIR LOG + LOVE */
+.header{
   position:relative;
-  width:130px;
-  height:15px;
-  margin-top:10px;
-}
-
-.path-line{
-  position:absolute;
-  left:12px;
-  right:12px;
-  top:7px;
-  height:1px;
-  background:linear-gradient(
-    90deg,
-    #d7e3ea 0%,
-    var(--accent-strong) 50%,
-    #d7e3ea 100%
-  );
-}
-
-.path-plane{
-  position:absolute;
-  left:50%;
-  top:-1px;
-  transform:translateX(-50%) rotate(8deg);
-  font-size:11px;
-  line-height:1;
-  color:var(--accent-deep);
-  background:#fff;
-  padding:0 4px;
-}
-
-.path-target{
-  position:absolute;
-  width:11px;
-  height:11px;
-  border:1px solid #9eb5c3;
-  border-radius:50%;
-  top:1px;
-  background:#fff;
-}
-
-.path-target.left{
-  left:0;
-}
-
-.path-target::before,
-.path-target::after{
-  content:"";
-  position:absolute;
-  background:#9eb5c3;
-}
-
-.path-target::before{
-  left:50%;
-  top:-3px;
-  width:1px;
-  height:14px;
-  transform:translateX(-50%);
-}
-
-.path-target::after{
-  top:50%;
-  left:-3px;
-  width:14px;
-  height:1px;
-  transform:translateY(-50%);
-}
-
-.path-scale{
-  position:absolute;
-  right:0;
-  top:-1px;
-  width:12px;
-  text-align:center;
-  font-size:10px;
-  line-height:1;
-  color:#9eb5c3;
-  background:#fff;
-  padding:0 1px;
-}
-/* 하단 정보 */
-.meta{
-  position:absolute;
-  left:19px;
-  right:15px;
-  bottom:14px;
-  display:grid;
-  grid-template-columns:1.15fr .85fr .75fr;
-  gap:12px;
-}
-
-.item .label{
-  font-size:6.4px;
-  font-weight:800;
-  letter-spacing:.85px;
-  color:#a1a9ae;
-}
-
-.item .value{
-  margin-top:3px;
-  font-size:8.2px;
-  font-weight:700;
-  color:#50585d;
-  white-space:nowrap;
-  min-height:12px;
   display:flex;
-  align-items:center;
-}
-
-.sight-item .value{
-  justify-content:flex-start;
-  padding-left:5px;
-}
-
-/* 사격 선수 모티프: 아주 작은 조준선 */
-.crosshair{
-  display:inline-block;
-  width:12px;
-  height:12px;
-  margin-right:5px;
-  vertical-align:-2px;
-  border:1px solid #8fa7b6;
-  border-radius:50%;
-  position:relative;
-}
-.crosshair::before,
-.crosshair::after{
-  content:"";
-  position:absolute;
-  background:#8fa7b6;
-}
-.crosshair::before{
-  left:50%;
-  top:-4px;
-  width:1px;
-  height:18px;
-  transform:translateX(-50%);
-}
-.crosshair::after{
-  top:50%;
-  left:-4px;
-  height:1px;
-  width:18px;
-  transform:translateY(-50%);
-}
-
-/* 오른쪽 스텁 */
-.stub{
-  position:relative;
-  padding:15px 14px 13px 16px;
-  border-left:1px dashed #cfd9df;
-  background:
-    linear-gradient(180deg, rgba(220,236,247,.46), rgba(255,255,255,.72));
-}
-
-.stub-head{
-  font-size:6.8px;
-  font-weight:800;
-  letter-spacing:1.15px;
-  color:#7c8991;
-  text-align:left;
-}
-
-.dday{
-  position:absolute;
-  top:62px;
-  left:18px;
-  transform:translateY(-50%);
-  min-height:30px;
-  text-align:left;
-  white-space:nowrap;
-  font-variant-numeric:tabular-nums;
-  color:#30383d;
-}
-
-.dday-seat{
-  display:inline-block;
-  font-size:30px;
-  line-height:1;
-  font-weight:660;
-  letter-spacing:0;
-  color:#30383d;
-}
-
-.dday.medium .dday-seat{
-  font-size:27px;
-}
-
-.dday.long .dday-seat{
-  font-size:23px;
-}
-
-.dday.today .dday-seat{
-  font-size:24px;
-}
-
-.dday.negative .dday-seat{
-  font-size:24px;
-  letter-spacing:.2px;
-}
-
-.wind{
-  position:absolute;
-  left:16px;
-  right:14px;
-  bottom:14px;
-}
-
-.wind-row{
-  display:flex;
-  align-items:center;
+  align-items:flex-start;
   justify-content:space-between;
-  margin-bottom:5px;
+  gap:12px;
+  padding-bottom:7px;
 }
 
-.wind-label{
-  font-size:6.3px;
+.header::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:1px;
+  background:var(--line-soft);
+}
+
+.label{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  font-size:9px;
+  line-height:1;
   font-weight:800;
-  letter-spacing:.75px;
-  color:#9aa5aa;
+  letter-spacing:.08em;
+  color:#526f88;
 }
 
-.wind-value{
-  font-size:7.1px;
-  font-weight:700;
-  color:#688ba1;
+.label-dot{
+  width:4px;
+  height:4px;
+  flex:0 0 4px;
+  border-radius:50%;
+  background:var(--dot);
 }
 
-.wind-track{
+.serial{
   position:relative;
-  height:5px;
-  border-radius:99px;
-  background:#e9eef1;
+  z-index:1;
+  margin-top:-1px;
+  padding-left:6px;
+  background:var(--card);
+  font-size:8px;
+  line-height:1;
+  font-weight:600;
+  letter-spacing:.08em;
+  color:var(--sub);
+}
+
+/* 페어명 너비가 아래 구분선 너비가 되도록 묶음 */
+.pair-block{
+  display:inline-flex;
+  flex-direction:column;
+  align-items:stretch;
+  width:max-content;
+  max-width:100%;
+  margin-top:8px;
+}
+
+.pair{
+  font-size:15px;
+  line-height:1.2;
+  font-weight:800;
+  letter-spacing:.01em;
+  white-space:nowrap;
+}
+
+.since{
+  margin-top:7px;
+  padding-bottom:7px;
+  border-bottom:1px solid var(--line-soft);
+  font-size:8px;
+  line-height:1;
+  font-weight:600;
+  letter-spacing:.035em;
+  color:var(--sub);
+  white-space:nowrap;
+}
+
+.dday-label{
+  margin-top:12px;
+  font-size:8.5px;
+  line-height:1;
+  font-weight:800;
+  letter-spacing:.08em;
+  color:var(--accent-text);
+}
+
+.dday-row{
+  margin-top:6px;
+  display:flex;
+  align-items:flex-end;
+}
+
+/* 왼쪽 기준 고정.
+   D+ 42 → D+ 100처럼 자릿수가 늘어나면 오른쪽으로만 자연스럽게 확장 */
+.dday{
+  display:inline-flex;
+  align-items:baseline;
+  gap:3px; /* D↔+ / +↔숫자 간격을 동일하게 */
+  width:max-content;
+  white-space:nowrap;
+  font-family:inherit;
+  font-size:29px;
+  line-height:.95;
+  font-weight:800;
+  letter-spacing:0;
+  color:#202327;
+  font-variant-numeric:tabular-nums;
+}
+
+.dday > span{
+  display:inline-block;
+}
+
+.progress-wrap{
+  margin-top:13px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+  gap:9px;
+}
+
+.progress-track{
+  width:100%;
+  height:7px;
+  border:1px solid #d8e0e6;
+  background:#fafbfc;
+  border-radius:999px;
   overflow:hidden;
 }
 
-.wind-fill{
+.progress-fill{
   height:100%;
-  width:27%;
-  border-radius:inherit;
-  background:var(--accent-strong);
+  width:0%;
+  background:var(--accent);
+  border-radius:999px;
+  transition:width .45s ease;
 }
 
-/* 미세한 거리/조준 눈금 */
-.sight-ticks{
-  position:absolute;
-  right:11px;
-  top:39px;
-  width:36px;
-  height:1px;
-  opacity:.22;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      #667985 0 1px,
-      transparent 1px 5px
-    );
+.progress-value{
+  min-width:27px;
+  text-align:right;
+  font-size:9px;
+  line-height:1;
+  font-weight:800;
+  color:#383838;
+  font-variant-numeric:tabular-nums;
+}
+
+@media (max-width:280px){
+  .card{padding-left:15px;padding-right:15px}
+  .pair{font-size:14px}
+  .dday{font-size:27px}
 }
 </style>
 </head>
 
 <body>
-<section class="ticket">
+  <main class="widget">
+    <div class="card-frame">
+      <section class="card">
+        <div class="header">
+          <div class="label">PAIR LOG <span class="label-dot"></span></div>
+          <div class="serial">LOVE</div>
+        </div>
 
-  <div class="main">
-    <div class="topline">
-      <span class="flight-code" id="serial">FLIGHT 0713</span>
+        <div class="pair-block">
+          <div class="pair" id="pairName"></div>
+          <div class="since" id="sinceDate"></div>
+        </div>
+
+        <div class="dday-label">D-DAY</div>
+
+        <div class="dday-row">
+          <div class="dday" id="dday"><span>D</span><span>+</span><span class="dday-number" id="ddayNumber"></span></div>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <div class="progress-value" id="progressValue"></div>
+        </div>
+      </section>
     </div>
-
-    <div class="mid-block">
-      <div class="pair" id="pairName">EDEN × ANEMONE</div>
-
-      <div class="flight-path" aria-hidden="true">
-        <span class="path-line"></span>
-        <span class="path-target left"></span>
-        <span class="path-plane">✈</span>
-        <span class="path-scale">⚖</span>
-      </div>
-    </div>
-
-    <div class="meta">
-      <div class="item">
-        <div class="label">DEPARTURE</div>
-        <div class="value" id="startDate">2026.07.13</div>
-      </div>
-
-      <div class="item">
-        <div class="label">ATTRIBUTE</div>
-        <div class="value">AERO / AERO</div>
-      </div>
-
-      <div class="item sight-item">
-        <div class="label">SIGHT</div>
-        <div class="value"><span class="crosshair"></span></div>
-      </div>
-    </div>
-  </div>
-
-  <aside class="stub">
-    <div class="stub-head">BOARDING DAY</div>
-
-    <div class="dday" id="dday">D+27</div>
-
-    <div class="sight-ticks"></div>
-
-    <div class="wind">
-      <div class="wind-row">
-        <span class="wind-label">NEXT 100</span>
-        <span class="wind-value" id="progressText">27%</span>
-      </div>
-
-      <div class="wind-track">
-        <div class="wind-fill" id="windFill"></div>
-      </div>
-    </div>
-  </aside>
-
-</section>
+  </main>
 
 <script>
-/* ===== 이 부분만 바꾸면 다른 페어에 재사용 가능 ===== */
-const PAIR_NAME  = "EDEN × ANEMONE";
-const START_DATE = "2026-07-13";  // YYYY-MM-DD
-/* ================================================= */
+/* =========================
+   여기만 수정하면 됩니다.
+   ========================= */
+const CONFIG = {
+  pairName: "EDEN × ANEMONE",
+  startDate: "2026-07-13"   // YYYY-MM-DD
+};
 
-const TZ = "Asia/Seoul";
+/* 시작일을 D+1로 계산 */
+function getInclusiveDays(startDate){
+  const [y,m,d] = startDate.split("-").map(Number);
+  const start = Date.UTC(y,m-1,d);
 
-function getKstDate(){
-  const parts = new Intl.DateTimeFormat("en-CA",{
-    timeZone:TZ,
-    year:"numeric",
-    month:"2-digit",
-    day:"2-digit"
-  }).formatToParts(new Date());
+  const now = new Date();
+  const today = Date.UTC(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate()
+  );
 
-  const o={};
-  for(const p of parts){
-    if(p.type!=="literal") o[p.type]=Number(p.value);
-  }
-  return o;
+  return Math.max(1,Math.floor((today-start)/86400000)+1);
 }
 
-function utc(y,m,d){
-  return Date.UTC(y,m-1,d);
+/* 100일 단위 진행률
+   D+42  → 42%
+   D+147 → 47%
+   D+200 → 100%
+*/
+function getProgress(days){
+  if(days <= 0) return 0;
+  const remainder = days % 100;
+  return remainder === 0 ? 100 : remainder;
 }
 
-function pad(n){
-  return String(n).padStart(2,"0");
+function render(){
+  const days = getInclusiveDays(CONFIG.startDate);
+  const progress = getProgress(days);
+
+  document.getElementById("pairName").textContent = CONFIG.pairName;
+  document.getElementById("sinceDate").textContent =
+    "SINCE  " + CONFIG.startDate.replaceAll("-",".");
+
+  /* D+와 숫자 사이 간격은 CSS gap으로 조절 */
+  document.getElementById("ddayNumber").textContent = days;
+
+  document.getElementById("progressFill").style.width = progress + "%";
+  document.getElementById("progressValue").textContent = progress + "%";
 }
 
-function update(){
-  const now=getKstDate();
-  const [sy,sm,sd]=START_DATE.split("-").map(Number);
-
-  const todayUTC=utc(now.year,now.month,now.day);
-  const startUTC=utc(sy,sm,sd);
-
-  /* 시작일 = 1일째 */
-  const days=Math.floor((todayUTC-startUTC)/86400000)+1;
-
-  document.getElementById("pairName").textContent=PAIR_NAME;
-  document.getElementById("startDate").textContent=
-    `${sy}.${pad(sm)}.${pad(sd)}`;
-
-  document.getElementById("serial").textContent=
-    `FLIGHT ${pad(sm)}${pad(sd)}`;
-
-  const dday=document.getElementById("dday");
-  dday.className = "dday";
-
-  if(days > 0){
-    dday.innerHTML = `<span class="dday-seat">${days}D</span>`;
-  }else if(days === 0){
-    dday.classList.add("today");
-    dday.innerHTML = `<span class="dday-seat">0D</span>`;
-  }else{
-    dday.classList.add("negative");
-    dday.innerHTML = `<span class="dday-seat">-${Math.abs(days)}D</span>`;
-  }
-
-  const abs=Math.abs(days);
-  if(abs>=1000) dday.classList.add("long");
-  else if(abs>=100) dday.classList.add("medium");
-
-  /* 100일 단위로 다시 차는 게이지 */
-  const safe=Math.max(days,1);
-  const next=Math.ceil(safe/100)*100;
-  const prev=Math.max(0,next-100);
-  const pct=Math.max(0,Math.min(100,safe-prev));
-
-  document.getElementById("progressText").textContent=`${pct}%`;
-  document.getElementById("windFill").style.width=`${pct}%`;
-}
-
-update();
-setInterval(update,60000);
+render();
 </script>
 </body>
 </html>
