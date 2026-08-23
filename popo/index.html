@@ -1,1 +1,302 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pair D-Day Widget</title>
 
+<style>
+:root{
+  --page:#ffffff;
+  --card:#ffffff;
+  --text:#2B2924;
+  --sub:#817B70;
+  --line:#E8DEC2;
+  --line-soft:#F3EBD8;
+  --accent:#F3E3A8;
+  --accent-text:#9A7E35;
+  --dot:#EEDFA8;
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  padding:0;
+  background:transparent;
+  font-family:Pretendard,"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--text);
+}
+
+body{
+  min-height:100vh;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  padding:4px;
+}
+
+.widget{
+  width:min(100%,324px);
+}
+
+/* 일반 라운드 카드 */
+.card-frame{
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:var(--card);
+  overflow:hidden;
+}
+
+.card{
+  width:100%;
+  padding:14px 18px 14px;
+  background:var(--card);
+}
+
+/* PAIR LOG + LOVE */
+.header{
+  position:relative;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  padding-bottom:7px;
+}
+
+.header::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:1px;
+  background:var(--line-soft);
+}
+
+.label{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  font-size:9px;
+  line-height:1;
+  font-weight:800;
+  letter-spacing:.08em;
+  color:#92782F;
+}
+
+.label-dot{
+  width:4px;
+  height:4px;
+  flex:0 0 4px;
+  border-radius:50%;
+  background:var(--dot);
+}
+
+.serial{
+  position:relative;
+  z-index:1;
+  margin-top:-1px;
+  padding-left:6px;
+  background:var(--card);
+  font-size:8px;
+  line-height:1;
+  font-weight:600;
+  letter-spacing:.08em;
+  color:var(--sub);
+}
+
+/* 페어명 너비가 아래 구분선 너비가 되도록 묶음 */
+.pair-block{
+  display:inline-flex;
+  flex-direction:column;
+  align-items:stretch;
+  width:max-content;
+  max-width:100%;
+  margin-top:8px;
+}
+
+.pair{
+  font-size:15px;
+  line-height:1.2;
+  font-weight:800;
+  letter-spacing:.01em;
+  white-space:nowrap;
+}
+
+.since{
+  margin-top:7px;
+  padding-bottom:7px;
+  border-bottom:1px solid var(--line-soft);
+  font-size:8px;
+  line-height:1;
+  font-weight:600;
+  letter-spacing:.035em;
+  color:var(--sub);
+  white-space:nowrap;
+}
+
+.dday-label{
+  margin-top:12px;
+  font-size:8.5px;
+  line-height:1;
+  font-weight:800;
+  letter-spacing:.08em;
+  color:var(--accent-text);
+}
+
+.dday-row{
+  margin-top:6px;
+  display:flex;
+  align-items:flex-end;
+}
+
+/* 왼쪽 기준 고정.
+   D+ 42 → D+ 100처럼 자릿수가 늘어나면 오른쪽으로만 자연스럽게 확장 */
+.dday{
+  display:inline-flex;
+  align-items:baseline;
+  gap:3px; /* D↔+ / +↔숫자 간격을 동일하게 */
+  width:max-content;
+  white-space:nowrap;
+  font-family:inherit;
+  font-size:29px;
+  line-height:.95;
+  font-weight:800;
+  letter-spacing:0;
+  color:#292529;
+  font-variant-numeric:tabular-nums;
+}
+
+.dday > span{
+  display:inline-block;
+}
+
+.progress-wrap{
+  margin-top:13px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+  gap:9px;
+}
+
+.progress-track{
+  width:100%;
+  height:7px;
+  border:1px solid #E5DAC0;
+  background:#FFFEFA;
+  border-radius:999px;
+  overflow:hidden;
+}
+
+.progress-fill{
+  height:100%;
+  width:0%;
+  background:var(--accent);
+  border-radius:999px;
+  transition:width .45s ease;
+}
+
+.progress-value{
+  min-width:27px;
+  text-align:right;
+  font-size:9px;
+  line-height:1;
+  font-weight:800;
+  color:#322F29;
+  font-variant-numeric:tabular-nums;
+}
+
+@media (max-width:280px){
+  .card{padding-left:15px;padding-right:15px}
+  .pair{font-size:14px}
+  .dday{font-size:27px}
+}
+</style>
+</head>
+
+<body>
+  <main class="widget">
+    <div class="card-frame">
+      <section class="card">
+        <div class="header">
+          <div class="label">PAIR LOG <span class="label-dot"></span></div>
+          <div class="serial">LOVE</div>
+        </div>
+
+        <div class="pair-block">
+          <div class="pair" id="pairName"></div>
+          <div class="since" id="sinceDate"></div>
+        </div>
+
+        <div class="dday-label">D-DAY</div>
+
+        <div class="dday-row">
+          <div class="dday" id="dday"><span>D</span><span>+</span><span class="dday-number" id="ddayNumber"></span></div>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <div class="progress-value" id="progressValue"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+<script>
+/* =========================
+   여기만 수정하면 됩니다.
+   ========================= */
+const CONFIG = {
+  pairName: "OVERLORD × POPO",
+  startDate: "2026-07-02"   // YYYY-MM-DD
+};
+
+/* 시작일을 D+1로 계산 */
+function getInclusiveDays(startDate){
+  const [y,m,d] = startDate.split("-").map(Number);
+  const start = Date.UTC(y,m-1,d);
+
+  const now = new Date();
+  const today = Date.UTC(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate()
+  );
+
+  return Math.max(1,Math.floor((today-start)/86400000)+1);
+}
+
+/* 100일 단위 진행률
+   D+42  → 42%
+   D+147 → 47%
+   D+200 → 100%
+*/
+function getProgress(days){
+  if(days <= 0) return 0;
+  const remainder = days % 100;
+  return remainder === 0 ? 100 : remainder;
+}
+
+function render(){
+  const days = getInclusiveDays(CONFIG.startDate);
+  const progress = getProgress(days);
+
+  document.getElementById("pairName").textContent = CONFIG.pairName;
+  document.getElementById("sinceDate").textContent =
+    "SINCE  " + CONFIG.startDate.replaceAll("-",".");
+
+  /* D+와 숫자 사이 간격은 CSS gap으로 조절 */
+  document.getElementById("ddayNumber").textContent = days;
+
+  document.getElementById("progressFill").style.width = progress + "%";
+  document.getElementById("progressValue").textContent = progress + "%";
+}
+
+render();
+</script>
+</body>
+</html>
