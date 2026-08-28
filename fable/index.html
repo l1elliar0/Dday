@@ -152,12 +152,10 @@ body{
   align-items:flex-end;
 }
 
-/* 왼쪽 기준 고정.
-   D+ 42 → D+ 100처럼 자릿수가 늘어나면 오른쪽으로만 자연스럽게 확장 */
 .dday{
   display:inline-flex;
   align-items:baseline;
-  gap:3px; /* D↔+ / +↔숫자 간격을 동일하게 */
+  gap:3px;
   width:max-content;
   white-space:nowrap;
   font-family:inherit;
@@ -233,7 +231,9 @@ body{
         <div class="dday-label">D-DAY</div>
 
         <div class="dday-row">
-          <div class="dday" id="dday"><span>D</span><span>+</span><span class="dday-number" id="ddayNumber"></span></div>
+          <div class="dday" id="dday">
+            <span>D</span><span>+</span><span class="dday-number" id="ddayNumber"></span>
+          </div>
         </div>
 
         <div class="progress-wrap">
@@ -248,11 +248,12 @@ body{
 
 <script>
 /* =========================
-   여기만 수정하면 됩니다.
+   나중에 여기만 수정하면 됩니다.
    ========================= */
 const CONFIG = {
-  pairName: "NAME × FABLE",
-  startDate: "2026-00-20"   // YYYY-MM-DD
+  partnerName: "",       // 페어캐 이름
+  fixedName: "FABLE",    // 고정 이름
+  startDate: ""          // 예: "2026-09-01"
 };
 
 /* 시작일을 D+1로 계산 */
@@ -270,11 +271,7 @@ function getInclusiveDays(startDate){
   return Math.max(1,Math.floor((today-start)/86400000)+1);
 }
 
-/* 100일 단위 진행률
-   D+42  → 42%
-   D+147 → 47%
-   D+200 → 100%
-*/
+/* 100일 단위 진행률 */
 function getProgress(days){
   if(days <= 0) return 0;
   const remainder = days % 100;
@@ -282,18 +279,29 @@ function getProgress(days){
 }
 
 function render(){
-  const days = getInclusiveDays(CONFIG.startDate);
-  const progress = getProgress(days);
+  const pairName = CONFIG.partnerName
+    ? CONFIG.partnerName + " × " + CONFIG.fixedName
+    : CONFIG.fixedName;
 
-  document.getElementById("pairName").textContent = CONFIG.pairName;
-  document.getElementById("sinceDate").textContent =
-    "SINCE  " + CONFIG.startDate.replaceAll("-",".");
+  document.getElementById("pairName").textContent = pairName;
 
-  /* D+와 숫자 사이 간격은 CSS gap으로 조절 */
-  document.getElementById("ddayNumber").textContent = days;
+  if(CONFIG.startDate){
+    const days = getInclusiveDays(CONFIG.startDate);
+    const progress = getProgress(days);
 
-  document.getElementById("progressFill").style.width = progress + "%";
-  document.getElementById("progressValue").textContent = progress + "%";
+    document.getElementById("sinceDate").textContent =
+      "SINCE  " + CONFIG.startDate.replaceAll("-",".");
+
+    document.getElementById("ddayNumber").textContent = days;
+    document.getElementById("progressFill").style.width = progress + "%";
+    document.getElementById("progressValue").textContent = progress + "%";
+  }else{
+    /* 빈 템플릿: 특수 대시나 임시 문구 없이 값만 비워둠 */
+    document.getElementById("sinceDate").textContent = "SINCE";
+    document.getElementById("ddayNumber").textContent = "";
+    document.getElementById("progressFill").style.width = "0%";
+    document.getElementById("progressValue").textContent = "";
+  }
 }
 
 render();
