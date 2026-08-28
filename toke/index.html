@@ -1,1 +1,314 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pair D-Day Widget</title>
 
+<style>
+:root{
+  --page:#ffffff;
+  --card:#ffffff;
+  --text:#27352f;
+  --sub:#65746d;
+  --line:#b9c8c1;
+  --line-soft:#d5dfda;
+  --accent:#9fbcae;
+  --accent-text:#4f7162;
+  --dot:#b7cfc3;
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  padding:0;
+  background:transparent;
+  font-family:Pretendard,"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--text);
+}
+
+body{
+  min-height:100vh;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  padding:4px;
+}
+
+.widget{
+  width:min(100%,324px);
+}
+
+/* 일반 라운드 카드 */
+.card-frame{
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:var(--card);
+  overflow:hidden;
+}
+
+.card{
+  width:100%;
+  padding:14px 18px 14px;
+  background:var(--card);
+}
+
+/* PAIR LOG + LOVE */
+.header{
+  position:relative;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  padding-bottom:7px;
+}
+
+.header::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:1px;
+  background:var(--line-soft);
+}
+
+.label{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  font-size:9px;
+  line-height:1;
+  font-weight:800;
+  letter-spacing:.08em;
+  color:#476c5c;
+}
+
+.label-dot{
+  width:4px;
+  height:4px;
+  flex:0 0 4px;
+  border-radius:50%;
+  background:var(--dot);
+}
+
+.serial{
+  position:relative;
+  z-index:1;
+  margin-top:-1px;
+  padding-left:6px;
+  background:var(--card);
+  font-size:8px;
+  line-height:1;
+  font-weight:600;
+  letter-spacing:.08em;
+  color:var(--sub);
+}
+
+/* 페어명 너비가 아래 구분선 너비가 되도록 묶음 */
+.pair-block{
+  display:inline-flex;
+  flex-direction:column;
+  align-items:stretch;
+  width:max-content;
+  max-width:100%;
+  margin-top:8px;
+}
+
+.pair{
+  font-size:15px;
+  line-height:1.2;
+  font-weight:800;
+  letter-spacing:.01em;
+  white-space:nowrap;
+}
+
+.since{
+  margin-top:7px;
+  padding-bottom:7px;
+  border-bottom:1px solid var(--line-soft);
+  font-size:8px;
+  line-height:1;
+  font-weight:600;
+  letter-spacing:.035em;
+  color:var(--sub);
+  white-space:nowrap;
+}
+
+.dday-label{
+  margin-top:12px;
+  font-size:8.5px;
+  line-height:1;
+  font-weight:800;
+  letter-spacing:.08em;
+  color:var(--accent-text);
+}
+
+.dday-row{
+  margin-top:6px;
+  display:flex;
+  align-items:flex-end;
+}
+
+.dday{
+  display:inline-flex;
+  align-items:baseline;
+  gap:3px;
+  width:max-content;
+  white-space:nowrap;
+  font-family:inherit;
+  font-size:29px;
+  line-height:.95;
+  font-weight:800;
+  letter-spacing:0;
+  color:#24312b;
+  font-variant-numeric:tabular-nums;
+}
+
+.dday > span{
+  display:inline-block;
+}
+
+.progress-wrap{
+  margin-top:13px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+  gap:9px;
+}
+
+.progress-track{
+  width:100%;
+  height:7px;
+  border:1px solid #b8c8c0;
+  background:#f1f5f3;
+  border-radius:999px;
+  overflow:hidden;
+}
+
+.progress-fill{
+  height:100%;
+  width:0%;
+  background:var(--accent);
+  border-radius:999px;
+  transition:width .45s ease;
+}
+
+.progress-value{
+  min-width:27px;
+  text-align:right;
+  font-size:9px;
+  line-height:1;
+  font-weight:800;
+  color:#34423c;
+  font-variant-numeric:tabular-nums;
+}
+
+@media (max-width:280px){
+  .card{padding-left:15px;padding-right:15px}
+  .pair{font-size:14px}
+  .dday{font-size:27px}
+}
+</style>
+</head>
+
+<body>
+  <main class="widget">
+    <div class="card-frame">
+      <section class="card">
+        <div class="header">
+          <div class="label">PAIR LOG <span class="label-dot"></span></div>
+          <div class="serial">LOVE</div>
+        </div>
+
+        <div class="pair-block">
+          <div class="pair" id="pairName"></div>
+          <div class="since" id="sinceDate"></div>
+        </div>
+
+        <div class="dday-label">D-DAY</div>
+
+        <div class="dday-row">
+          <div class="dday" id="dday">
+            <span>D</span><span id="ddaySign">+</span><span class="dday-number" id="ddayNumber"></span>
+          </div>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <div class="progress-value" id="progressValue"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+<script>
+/* =========================
+   여기만 수정하면 됩니다.
+   ========================= */
+const CONFIG = {
+  pairName: "KARMA × TOKE",
+  startDate: "2026-09-01"   // YYYY-MM-DD
+};
+
+/* 날짜 차이 계산 */
+function getDayState(startDate){
+  const [y,m,d] = startDate.split("-").map(Number);
+  const start = Date.UTC(y,m-1,d);
+
+  const now = new Date();
+  const today = Date.UTC(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate()
+  );
+
+  const diff = Math.floor((today-start)/86400000);
+
+  /* 시작 전: D-3, D-2, D-1 */
+  if(diff < 0){
+    return {
+      sign:"-",
+      days:Math.abs(diff),
+      started:false
+    };
+  }
+
+  /* 시작일을 D+1로 계산 */
+  return {
+    sign:"+",
+    days:diff + 1,
+    started:true
+  };
+}
+
+/* 100일 단위 진행률 */
+function getProgress(days){
+  if(days <= 0) return 0;
+  const remainder = days % 100;
+  return remainder === 0 ? 100 : remainder;
+}
+
+function render(){
+  const state = getDayState(CONFIG.startDate);
+  const progress = state.started ? getProgress(state.days) : 0;
+
+  document.getElementById("pairName").textContent = CONFIG.pairName;
+  document.getElementById("sinceDate").textContent =
+    "SINCE  " + CONFIG.startDate.replaceAll("-",".");
+
+  document.getElementById("ddaySign").textContent = state.sign;
+  document.getElementById("ddayNumber").textContent = state.days;
+
+  document.getElementById("progressFill").style.width = progress + "%";
+  document.getElementById("progressValue").textContent = progress + "%";
+}
+
+render();
+</script>
+</body>
+</html>
