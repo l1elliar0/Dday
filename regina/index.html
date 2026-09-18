@@ -10,16 +10,14 @@
   --page:#ffffff;
   --card:#ffffff;
 
-  /* BLACK */
-  --text:#1d2228;
-  --sub:#727b84;
+  --text:#20252a;
+  --sub:#707983;
 
-  /* ICE BLUE */
-  --line:#cbdbe6;
-  --line-soft:#e2edf4;
+  --line-soft:#dfe8ee;
+
   --accent:#8ed7ff;
-  --accent-text:#4d91b8;
-  --dot:#91d3f5;
+  --accent-text:#4f8eaf;
+  --dot:#8ed7ff;
 }
 
 *{
@@ -52,69 +50,97 @@ body{
   width:min(100%,324px);
 }
 
-/* 카드 외곽 */
+
+/* =========================
+   바깥 테두리
+   좌측 상단 BLACK
+   → 우측 하단 ICE BLUE
+   ========================= */
+
 .card-frame{
   width:100%;
-  border:1px solid var(--line);
-  border-radius:12px;
-  background:#ffffff;
-  overflow:hidden;
-}
 
-/* 카드 전체
-   좌측 상단 BLACK → 우측 하단 ICE BLUE */
-.card{
-  width:100%;
-  padding:14px 18px 14px;
+  padding:1px;
+
+  border-radius:12px;
 
   background:
     linear-gradient(
       135deg,
-      rgba(20,24,29,.11) 0%,
-      rgba(70,95,110,.05) 45%,
-      rgba(142,215,255,.20) 100%
-    ),
-    #ffffff;
+      #171b20 0%,
+      #536e7d 48%,
+      #8ed7ff 100%
+    );
+
+  overflow:hidden;
 }
 
+
+/* 카드 내부는 흰색 그대로 */
+
+.card{
+  width:100%;
+
+  padding:14px 18px 14px;
+
+  border-radius:11px;
+
+  background:#ffffff;
+}
+
+
 /* PAIR LOG + LOVE */
+
 .header{
   position:relative;
+
   display:flex;
   align-items:flex-start;
   justify-content:space-between;
+
   gap:12px;
+
   padding-bottom:7px;
 }
 
 .header::after{
   content:"";
+
   position:absolute;
+
   left:0;
   right:0;
   bottom:0;
+
   height:1px;
+
   background:var(--line-soft);
 }
 
 .label{
   display:flex;
   align-items:center;
+
   gap:5px;
 
   font-size:9px;
   line-height:1;
+
   font-weight:800;
+
   letter-spacing:.08em;
 
-  color:#3f7fa6;
+  color:var(--accent-text);
 }
 
 .label-dot{
   width:4px;
   height:4px;
+
   flex:0 0 4px;
+
   border-radius:50%;
+
   background:var(--dot);
 }
 
@@ -123,22 +149,29 @@ body{
   z-index:1;
 
   margin-top:-1px;
+
   padding-left:6px;
 
-  background:rgba(255,255,255,.45);
+  background:var(--card);
 
   font-size:8px;
   line-height:1;
+
   font-weight:600;
+
   letter-spacing:.08em;
 
   color:var(--sub);
 }
 
+
 /* 페어명 */
+
 .pair-block{
   display:inline-flex;
+
   flex-direction:column;
+
   align-items:stretch;
 
   width:max-content;
@@ -150,23 +183,28 @@ body{
 .pair{
   font-size:15px;
   line-height:1.2;
+
   font-weight:800;
+
   letter-spacing:.01em;
 
-  color:#171b20;
-
   white-space:nowrap;
+
+  color:var(--text);
 }
 
 .since{
   margin-top:7px;
+
   padding-bottom:7px;
 
   border-bottom:1px solid var(--line-soft);
 
   font-size:8px;
   line-height:1;
+
   font-weight:600;
+
   letter-spacing:.035em;
 
   color:var(--sub);
@@ -174,13 +212,17 @@ body{
   white-space:nowrap;
 }
 
-/* D-DAY 라벨 */
+
+/* D-DAY */
+
 .dday-label{
   margin-top:12px;
 
   font-size:8.5px;
   line-height:1;
+
   font-weight:800;
+
   letter-spacing:.08em;
 
   color:var(--accent-text);
@@ -190,13 +232,15 @@ body{
   margin-top:6px;
 
   display:flex;
+
   align-items:flex-end;
 }
 
-/* D+ 숫자 */
 .dday{
   display:inline-flex;
+
   align-items:baseline;
+
   gap:3px;
 
   width:max-content;
@@ -204,9 +248,12 @@ body{
   white-space:nowrap;
 
   font-family:inherit;
+
   font-size:29px;
   line-height:.95;
+
   font-weight:800;
+
   letter-spacing:0;
 
   color:#171b20;
@@ -218,44 +265,50 @@ body{
   display:inline-block;
 }
 
-/* 진행률 */
+
+/* =========================
+   진행률
+   ========================= */
+
 .progress-wrap{
   margin-top:13px;
 
   display:grid;
+
   grid-template-columns:minmax(0,1fr) auto;
+
   align-items:center;
+
   gap:9px;
 }
 
 .progress-track{
   width:100%;
+
   height:7px;
 
-  border:1px solid #bfd6e5;
+  border:1px solid #cadbe5;
 
-  background:
-    linear-gradient(
-      90deg,
-      rgba(26,31,37,.04),
-      rgba(142,215,255,.12)
-    );
+  background:#f5fafd;
 
   border-radius:999px;
 
   overflow:hidden;
 }
 
+
 /* 선명한 BLACK → ICE BLUE */
+
 .progress-fill{
   height:100%;
+
   width:0%;
 
   background:
     linear-gradient(
       135deg,
       #171b20 0%,
-      #334955 38%,
+      #4d6978 45%,
       #8ed7ff 100%
     );
 
@@ -271,12 +324,14 @@ body{
 
   font-size:9px;
   line-height:1;
+
   font-weight:800;
 
-  color:#252c32;
+  color:#252b31;
 
   font-variant-numeric:tabular-nums;
 }
+
 
 @media (max-width:280px){
 
@@ -292,9 +347,11 @@ body{
   .dday{
     font-size:27px;
   }
+
 }
 </style>
 </head>
+
 
 <body>
 
@@ -423,13 +480,9 @@ function getInclusiveDays(startDate){
 
   const today =
     Date.UTC(
-
       now.getFullYear(),
-
       now.getMonth(),
-
       now.getDate()
-
     );
 
 
